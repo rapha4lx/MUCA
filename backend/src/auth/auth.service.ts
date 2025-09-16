@@ -1,6 +1,6 @@
 // auth.service.ts
 
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import { AuthLoginDTO } from './dto/login.dto';
@@ -21,13 +21,16 @@ export class AuthService {
       ...user
     });
 
-    if (user && (user.password === userDB?.password || userDB?.walletAddress === ''))
+    if (user && (user?.password === userDB?.password || userDB?.walletAddress === user?.walletAddress))
       return userDB;
     return null;
   }
 
-  async login(user: any) {
-    const payload = { username: user.username, sub: user.userId };
+  async login(user: AuthLoginDTO) {
+    if (!await this.validateUser(user))
+        throw new BadRequestException('Credential invalid');
+
+    const payload = { email: user.email, sub: user.walletAddress };
     return {
       access_token: this.jwtService.sign(payload),
     };

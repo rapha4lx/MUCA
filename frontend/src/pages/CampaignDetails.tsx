@@ -197,9 +197,9 @@ const CampaignDetails = () => {
                             value={w.address}
                             size={120}
                             bgColor="#ffffff"
-                            fgColor="#000000"
+                            fgColor="#70009cff"
                           />
-                          <div className="mt-2 text-xs text-muted-foreground break-all font-mono bg-muted/50 p-2 rounded w-full text-center">
+                          <div className="mt-2 text-xs text-muted-foreground break-all font-mono bg-muted/10 p-2 rounded w-full text-center">
                             {w.address}
                           </div>
                           <div className="text-sm text-muted-foreground mt-2">Destinação: {w.percentage}%</div>

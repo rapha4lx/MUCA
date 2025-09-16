@@ -64,7 +64,7 @@ export class UsersController {
             if (!user) throw new UnauthorizedException("Usuário não encontrado");
 
             // emite JWT
-            const token = this.jwtService.sign({ id: user.id, email: user.email });
+            const token = this.jwtService.sign({ id: user.id, email: user.email, walletAddress});
             return { token };
         } catch (err) {
             throw new UnauthorizedException("Challenge inválida ou não assinada");

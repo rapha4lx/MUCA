@@ -136,8 +136,11 @@ const challengeXdr = challengeData?.challengeXDR;
         setLoading(false);
         return { success: false, message: "Freighter retornou resposta inválida ao assinar." };
       }
-      // Send signed XDR back to server for validation
-  const verifyResp = await axios.post(`${url}/users/verify`, { signed_challenge: signedXdr });
+          // Send signed XDR back to server for validation
+  const verifyResp = await axios.post(`${url}/users/verify`, { 
+  signed_challenge: signedXdr,
+  walletAddress: publicKey // aqui é obrigatório
+});
   const verifyData = verifyResp?.data as any;
   const token = verifyData?.token;
       if (token) {

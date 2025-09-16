@@ -1,0 +1,10 @@
+/app/target/release/deps/soroban_env_macros-79ffe6dfa0b1db59.d: /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-env-macros-23.0.1/src/lib.rs /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-env-macros-23.0.1/src/call_macro_with_all_host_functions.rs /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-env-macros-23.0.1/src/path.rs /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-env-macros-23.0.1/src/synth_dispatch_host_fn_tests.rs /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-env-macros-23.0.1/src/synth_linear_memory_tests.rs /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-env-macros-23.0.1/src/synth_wasm_expr_type.rs
+
+/app/target/release/deps/libsoroban_env_macros-79ffe6dfa0b1db59.so: /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-env-macros-23.0.1/src/lib.rs /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-env-macros-23.0.1/src/call_macro_with_all_host_functions.rs /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-env-macros-23.0.1/src/path.rs /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-env-macros-23.0.1/src/synth_dispatch_host_fn_tests.rs /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-env-macros-23.0.1/src/synth_linear_memory_tests.rs /root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-env-macros-23.0.1/src/synth_wasm_expr_type.rs
+
+/root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-env-macros-23.0.1/src/lib.rs:
+/root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-env-macros-23.0.1/src/call_macro_with_all_host_functions.rs:
+/root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-env-macros-23.0.1/src/path.rs:
+/root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-env-macros-23.0.1/src/synth_dispatch_host_fn_tests.rs:
+/root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-env-macros-23.0.1/src/synth_linear_memory_tests.rs:
+/root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/soroban-env-macros-23.0.1/src/synth_wasm_expr_type.rs:

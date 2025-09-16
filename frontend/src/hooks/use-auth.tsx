@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import url from "./global-hook-config";
-import { saveTokenToLocalStorage } from "../../token-utils";
+import { saveTokenToLocalStorage, saveWalletToLocalStorage } from "../../token-utils";
 import {
   isConnected,
   requestAccess,
@@ -145,6 +145,8 @@ const challengeXdr = challengeData?.challengeXDR;
   const token = verifyData?.token;
       if (token) {
         saveTokenToLocalStorage(token);
+        // store wallet address so UI can show shortened address
+        saveWalletToLocalStorage(publicKey);
         setLoading(false);
         return { success: true };
       }

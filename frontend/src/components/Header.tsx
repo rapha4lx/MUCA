@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { getWalletFromLocalStorage, removeWalletFromLocalStorage } from "../../token-utils";
 import { motion } from "framer-motion";
 
 const Header = () => {
@@ -8,7 +9,11 @@ const Header = () => {
   const navItems = [
     { name: "Home", path: "/" },
     { name: "Criar Campanha", path: "/create" },
+    { name: "Explorar", path: "/explore" },
   ];
+
+  const wallet = getWalletFromLocalStorage();
+  const shortened = wallet ? `${wallet.slice(0, 6)}...${wallet.slice(-4)}` : null;
 
   return (
     <motion.header
@@ -50,11 +55,20 @@ const Header = () => {
 
         <div className="flex items-center space-x-4">
           {location.pathname !== "/login" && (
-            <Link to="/login">
-              <Button variant="wallet" size="sm">
-                Conectar Carteira
-              </Button>
-            </Link>
+            wallet ? (
+              <div className="flex items-center space-x-2">
+                <span className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-mono">{shortened}</span>
+                <Button size="sm" variant="ghost" onClick={() => { removeWalletFromLocalStorage(); window.location.href = '/login'; }}>
+                  Logout
+                </Button>
+              </div>
+            ) : (
+              <Link to="/login">
+                <Button variant="wallet" size="sm">
+                  Conectar Carteira
+                </Button>
+              </Link>
+            )
           )}
         </div>
       </div>

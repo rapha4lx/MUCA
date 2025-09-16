@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -26,28 +26,96 @@ const CreateCampaign = () => {
     description: "",
     target: "",
     category: "",
-    walletAddresses: [{ address: "", percentage: 100 }],
+    // default to 1 wallet receiving 95% (platform reserve 5%)
+    walletAddresses: [{ address: "", percentage: 95 }],
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (field: keyof CampaignForm, value: string) => {
+    // If target changes, recompute wallet percentages according to new platform fee
+    if (field === 'target') {
+      const targetStr = value || '';
+      const parsed = Number(targetStr) || 0;
+      setForm(prev => {
+        const fee = getPlatformFeePct(parsed);
+        const wallets = prev.walletAddresses && prev.walletAddresses.length > 0 ? [...prev.walletAddresses] : [{ address: '', percentage: 0 }];
+        const alloc = distributePercent(100 - fee, wallets.length);
+        const newList = wallets.map((w, i) => ({ ...w, percentage: alloc[i] }));
+        return { ...prev, target: targetStr, walletAddresses: newList };
+      });
+      return;
+    }
+
     setForm(prev => ({
       ...prev,
       [field]: value
     }));
   };
 
+  // Determine platform fee percent based on target tiers
+  const getPlatformFeePct = (targetValue: number) => {
+    if (targetValue <= 1000 && targetValue > 0) return 1; // 1%
+    if (targetValue <= 10000 && targetValue > 0) return 0.5; // 0.5%
+    if (targetValue > 10000) return 0.25; // 0.25%
+    // default when no target set
+    return 1;
+  };
+
+  // Distribute totalPercent (e.g., 99 or 95) into `count` parts, result in array summing exactly to totalPercent (2 decimals)
+  const distributePercent = (totalPercent: number, count: number) => {
+    if (count <= 0) return [];
+    const totalCents = Math.round(totalPercent * 100);
+    const base = Math.floor(totalCents / count);
+    const remainder = totalCents - base * count;
+    const arr: number[] = [];
+    for (let i = 0; i < count; i++) {
+      const cents = base + (i < remainder ? 1 : 0);
+      arr.push(Number((cents / 100).toFixed(2)));
+    }
+    return arr;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Validate wallet percentages sum to 100
+    // Validate wallets rules:
+    // - max 3 wallets
+    // - total distribution must be ~95% (we reserve 5%)
+    // - each wallet must be <= (95 / count)
     const wallets = form.walletAddresses || [];
-    const sum = wallets.reduce((acc, w) => acc + Number(w.percentage || 0), 0);
-    if (wallets.length > 0 && sum !== 100) {
-      alert(`A soma das porcentagens das carteiras deve ser 100%. Atualmente: ${sum}%`);
+    if (wallets.length > 3) {
+      alert('O número máximo de carteiras é 3.');
       setIsSubmitting(false);
       return;
+    }
+
+    const targetValue = Number(form.target) || 0;
+    const fee = getPlatformFeePct(targetValue);
+    const available = 100 - fee;
+    const sum = wallets.reduce((acc, w) => acc + Number(w.percentage || 0), 0);
+    const tolerance = 0.5; // allow small rounding differences
+    if (wallets.length > 0 && Math.abs(sum - available) > tolerance) {
+      alert(`A soma das porcentagens das carteiras deve ser aproximadamente ${available}% (taxa da plataforma: ${fee}%). Atualmente: ${sum.toFixed(2)}%`);
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (wallets.length > 0) {
+      const maxPer = available / wallets.length;
+      for (const w of wallets) {
+        const perc = Number(w.percentage || 0);
+        if (perc < 0) {
+          alert('Porcentagens não podem ser negativas.');
+          setIsSubmitting(false);
+          return;
+        }
+        if (perc - maxPer > 1e-6) {
+          alert(`Cada carteira deve receber no máximo ${maxPer.toFixed(2)}% quando há ${wallets.length} carteiras (taxa da plataforma: ${fee}%).`);
+          setIsSubmitting(false);
+          return;
+        }
+      }
     }
 
     // Mock submission
@@ -75,13 +143,24 @@ const CreateCampaign = () => {
   };
 
   const addWallet = () => {
-    setForm(prev => ({ ...prev, walletAddresses: [...(prev.walletAddresses || []), { address: '', percentage: 0 }] }));
+    setForm(prev => {
+      const list = [...(prev.walletAddresses || [])];
+      if (list.length >= 3) return prev; // don't add more than 3
+      list.push({ address: '', percentage: 0 });
+      // distribute 95% equally
+      const per = 95 / list.length;
+      const newList = list.map(w => ({ ...w, percentage: Number(per.toFixed(2)) }));
+      return { ...prev, walletAddresses: newList };
+    });
   };
 
   const removeWallet = (index: number) => {
     setForm(prev => {
       const list = (prev.walletAddresses || []).filter((_, i) => i !== index);
-      return { ...prev, walletAddresses: list };
+      if (list.length === 0) return { ...prev, walletAddresses: [{ address: '', percentage: 95 }] };
+      const per = 95 / list.length;
+      const newList = list.map(w => ({ ...w, percentage: Number(per.toFixed(2)) }));
+      return { ...prev, walletAddresses: newList };
     });
   };
 
@@ -95,6 +174,17 @@ const CreateCampaign = () => {
     "DeFi",
     "Outros"
   ];
+
+  // Recompute wallet percentages when target or wallet count changes
+  useEffect(() => {
+    const parsed = Number(form.target) || 0;
+    const fee = getPlatformFeePct(parsed);
+    const wallets = form.walletAddresses && form.walletAddresses.length > 0 ? [...form.walletAddresses] : [{ address: '', percentage: 0 }];
+    const alloc = distributePercent(100 - fee, wallets.length);
+    const newList = wallets.map((w, i) => ({ ...w, percentage: alloc[i] }));
+    setForm(prev => ({ ...prev, walletAddresses: newList }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form.target]);
 
   return (
     <div className="min-h-screen">
@@ -229,6 +319,15 @@ const CreateCampaign = () => {
                   {/* Wallet Addresses */}
                   <div className="space-y-2">
                     <Label className="flex items-center gap-2">Carteiras de Recebimento</Label>
+                      <div className="text-sm text-muted-foreground">
+                        Máximo de 3 carteiras. A taxa da plataforma depende da meta:
+                        <ul className="list-disc ml-5">
+                          <li>Até 1.000 → 1%</li>
+                          <li>Até 10.000 → 0,5%</li>
+                          <li>Acima de 10.000 → 0,25%</li>
+                        </ul>
+                        A distribuição disponível (100% - taxa) será dividida igualmente entre as carteiras.
+                      </div>
                     <div className="space-y-2">
                       {(form.walletAddresses || []).map((w, idx) => (
                         <div key={idx} className="flex gap-2">
@@ -242,17 +341,19 @@ const CreateCampaign = () => {
                             type="number"
                             placeholder="%"
                             value={w.percentage}
-                            onChange={(e) => updateWallet(idx, 'percentage', Number(e.target.value))}
-                            className="w-24 bg-input/50 border-primary/20"
+                            readOnly
+                            className="w-24 bg-input/50 border-primary/20 text-center"
                           />
                           <Button variant="ghost" onClick={() => removeWallet(idx)}>Remover</Button>
                         </div>
                       ))}
                       <div>
-                        <Button variant="outline" size="sm" onClick={addWallet}>Adicionar Carteira</Button>
+                        <Button variant="outline" size="sm" onClick={addWallet} disabled={(form.walletAddresses || []).length >= 3}>Adicionar Carteira</Button>
                       </div>
                     </div>
                   </div>
+                  <div className="text-sm text-muted-foreground">Taxa da plataforma: {getPlatformFeePct(Number(form.target) || 0)}% — distribuição disponível: { (100 - getPlatformFeePct(Number(form.target) || 0)).toFixed(2) }%</div>
+
                   <motion.div
                     className="pt-4"
                     whileHover={{ scale: isSubmitting ? 1 : 1.02 }}

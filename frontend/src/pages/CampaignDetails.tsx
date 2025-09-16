@@ -30,6 +30,16 @@ const CampaignDetails = () => {
 
   const progress = (campaign.raised / campaign.target) * 100;
 
+  const getPlatformFeePct = (targetValue: number) => {
+    if (targetValue <= 1000 && targetValue > 0) return 1; // 1%
+    if (targetValue <= 10000 && targetValue > 0) return 0.5; // 0.5%
+    if (targetValue > 10000) return 0.25; // 0.25%
+    return 1;
+  };
+
+  const feePct = getPlatformFeePct(campaign.target);
+  const feeAmount = (campaign.target * feePct) / 100;
+
   return (
     <div className="min-h-screen">
       <Header />
@@ -170,6 +180,7 @@ const CampaignDetails = () => {
                       </div>
                       <div className="text-sm text-muted-foreground">
                         arrecadados de {campaign.target.toLocaleString()} XLM
+                        <div className="mt-1 text-xs text-muted-foreground">Taxa da plataforma: <strong className="text-foreground">{feePct}%</strong> (~{feeAmount.toFixed(2)} XLM)</div>
                       </div>
                     </div>
                   </div>

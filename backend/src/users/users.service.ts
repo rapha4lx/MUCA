@@ -23,7 +23,7 @@ export class UsersService {
                 data: {...userInfo}
             });
             if (!user)
-              throw new UnauthorizedException('Credenciais de doacao inválidas.');
+              throw new UnauthorizedException('Credenciais de Criacao de usuario em uso.');
             return user;
         } catch (error) {
             throw new Error(error);
@@ -32,7 +32,7 @@ export class UsersService {
 
     async findFirst(userInfo: IUserFindOne): Promise<IUserFindOne | null> {
         try {
-            if (!(userInfo.email && userInfo.id && userInfo.walletAddress))
+            if (!(userInfo.email || userInfo.id || userInfo.walletAddress))
             {
                 console.error("erro");
                 throw new UnauthorizedException('Credenciais de login inválidas.');

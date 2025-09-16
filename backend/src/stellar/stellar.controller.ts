@@ -1,5 +1,6 @@
-import { Body, Controller, Get } from "@nestjs/common";
+import { Body, Controller, Get, UseGuards } from "@nestjs/common";
 import { StellarService } from "./stellar.service";
+import { AuthGuard } from "@nestjs/passport";
 
 
 
@@ -7,6 +8,7 @@ import { StellarService } from "./stellar.service";
 export class StellarController {
     constructor (private stellarService: StellarService) {}
 
+    @UseGuards(AuthGuard('jwt'))
     @Get('getAccount')
     async getAccount(@Body() data) {
         return await this.stellarService.getAccountInfo(data.address);

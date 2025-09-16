@@ -22,3 +22,35 @@ model User {
   password      String?
   walletAddress String?   @unique
 }
+
+model KittyWallets {
+  wallet        String
+  percentage    Int
+  kittyId       String
+  kitty         Kitty     @relation(fields: [kittyId], references: [id])
+
+  @@id([wallet, kittyId])
+}
+
+model Donation {
+  id        String   @id @default(uuid())
+  wallet    String
+  token     String
+  amount    Decimal  @db.Decimal(65, 8)
+  createdAt DateTime @default(now())
+  kittyId   String
+
+  kitty     Kitty    @relation(fields: [kittyId], references: [id])
+}
+
+model Kitty {
+  id            String       @id @default(uuid())
+  createAt      DateTime     @default(now())
+  name          String
+  wallets       KittyWallets[]
+  
+  currentValue  Decimal      @default(0.00) @db.Decimal(65, 2)
+  maxValue      Decimal      @default(100.00) @db.Decimal(65, 2)
+
+  donations     Donation[]
+}

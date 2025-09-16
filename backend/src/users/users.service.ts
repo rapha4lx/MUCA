@@ -23,7 +23,7 @@ export class UsersService {
                 data: {...userInfo}
             });
             if (!user)
-              throw new UnauthorizedException('Credenciais de login inválidas.');
+              throw new UnauthorizedException('Credenciais de doacao inválidas.');
             return user;
         } catch (error) {
             throw new Error(error);

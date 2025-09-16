@@ -78,7 +78,7 @@ const useAuth = () => {
    * We'll use isConnected/requestAccess/getAddress and signTransaction from the package.
    */
 
-  const loginWithFreighter = async (networkPassphrase = "Public Global Stellar Network ; September 2015"): Promise<AuthResult> => {
+  const loginWithFreighter = async (networkPassphrase = "Test SDF Network ; September 2015"): Promise<AuthResult> => {
     setLoading(true);
 
     try {

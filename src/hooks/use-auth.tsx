@@ -18,7 +18,7 @@ type AuthResult = { success: boolean; message?: string };
  * - loginWithFreighter: perform SEP-10 style flow using Freighter wallet
  *
  * Assumptions (adjust endpoints in `global-hook-config.ts` if your backend differs):
- * - POST `${url}/auth/login` with { email, password } -> { token }
+ * - POST `${url}/auth/login` with { email, password } -> { token } mudei p users.. toda as rotas..
  * - GET  `${url}/auth/challenge?account=${publicKey}` -> { challenge: string } (challenge XDR)
  * - POST `${url}/auth/verify` with { signed_challenge: string } -> { token }
  */
@@ -54,7 +54,7 @@ const useAuth = () => {
   const loginWithEmail = async (email: string, password: string): Promise<AuthResult> => {
     setLoading(true);
     try {
-      const response = await axios.post(`${url}/auth/login`, { email, password });
+      const response = await axios.post(`${url}/users/login`, { email, password });
       const respData = response?.data as any;
       const token = respData?.token;
       if (token) {
@@ -116,9 +116,9 @@ const useAuth = () => {
       }
 
       // Request challenge from backend (SEP-10 style)
-  const challengeResp = await axios.get(`${url}/auth/challenge`, { params: { account: publicKey } });
-  const challengeData = (challengeResp?.data) as any;
-  const challengeXdr = challengeData?.challenge || challengeData?.tx || challengeData?.transaction;
+const challengeResp = await axios.post(`${url}/users/challenge`, { walletAddress: publicKey });
+const challengeData = challengeResp?.data as any;
+const challengeXdr = challengeData?.challengeXDR;
       if (!challengeXdr) {
         setLoading(false);
         return { success: false, message: "Servidor não retornou challenge XDR." };
@@ -137,7 +137,7 @@ const useAuth = () => {
         return { success: false, message: "Freighter retornou resposta inválida ao assinar." };
       }
       // Send signed XDR back to server for validation
-  const verifyResp = await axios.post(`${url}/auth/verify`, { signed_challenge: signedXdr });
+  const verifyResp = await axios.post(`${url}/users/verify`, { signed_challenge: signedXdr });
   const verifyData = verifyResp?.data as any;
   const token = verifyData?.token;
       if (token) {

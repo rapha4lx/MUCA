@@ -2,7 +2,7 @@ import { Body, Controller, Post, UnauthorizedException } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { JwtService } from "@nestjs/jwt";
 
-import { Keypair, Networks, WebAuth } from "stellar-sdk";
+import { Keypair, Networks, WebAuth } from "@stellar/stellar-sdk";
 
 @Controller("users")
 export class UsersController {

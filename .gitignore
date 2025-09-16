@@ -1,3 +1,6 @@
 backend/pnpm-lock.yaml
 backend/prisma/migrations
 backend/pnpm-lock.yaml
+contracts/crowndfunding_template/target
+contracts/crowndfunding_factory/target
+contractsCargo.lock

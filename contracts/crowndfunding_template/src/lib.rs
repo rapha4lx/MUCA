@@ -18,7 +18,7 @@ impl CrowdfundingFactory {
         _category: Symbol,
         _beneficiary: Address
     ) -> Address {
-        log!(&env, "Nova vaquinha criada: ", title.clone());
+        log!(&env, "New crowdfunding created: ", title.clone());
         creator
     }
 
@@ -32,22 +32,22 @@ impl CrowdfundingFactory {
     ) -> (String, String, i128, u64, Symbol, Address) {
         let creator = Address::from_string(&String::from_str(&env, "GAAAAAAA"));
         (
-            String::from_str(&env, "Vaquinha Educação"),
-            String::from_str(&env, "Arrecadação para material escolar"),
+            String::from_str(&env, "Crowdfunding Education"),
+            String::from_str(&env, "Funding to Schoolarships"),
             1000000000,
             1735689600,
-            symbol_short!("educacao"),
+            symbol_short!("education"),
             creator
         )
     }
 
-    pub fn teste_acentos(env: Env) -> Vec<Symbol> {
+    pub fn test_accents(env: Env) -> Vec<Symbol> {
         vec![
             &env,
-            symbol_short!("educacao"),
-            symbol_short!("saude"), 
-            symbol_short!("cultura"),
-            symbol_short!("comunidade")
+            symbol_short!("education"),
+            symbol_short!("health"), 
+            symbol_short!("culture"),
+            symbol_short!("community")
         ]
     }
 }

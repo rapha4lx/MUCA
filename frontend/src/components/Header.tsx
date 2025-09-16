@@ -23,12 +23,9 @@ const Header = () => {
     >
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <Link to="/" className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-gradient-neon rounded-lg flex items-center justify-center shadow-neon">
-            <span className="text-white font-bold text-lg">C</span>
+          <div>
+            <img src="/muca.svg" alt="Muca" className="w-12 h-12" />
           </div>
-          <span className="text-xl font-bold bg-gradient-neon bg-clip-text text-transparent">
-            CryptoFund
-          </span>
         </Link>
 
         <nav className="hidden md:flex items-center space-x-6">

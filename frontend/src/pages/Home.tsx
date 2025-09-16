@@ -27,16 +27,58 @@ const Home = () => {
             className="text-center max-w-4xl mx-auto"
           >
             <h1 className="text-5xl md:text-7xl font-bold mb-6">
-              <span className="bg-gradient-neon bg-clip-text text-transparent">
-                Crowdfunding
-              </span>
-              <br />
-              <span className="text-foreground">do Futuro</span>
+              <div className="flex flex-col items-center">
+                {/* Big letters row (no squares) */}
+                <div className="flex items-end gap-6 md:gap-10 pb-2">
+                  <motion.span
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.05 }}
+                    className="text-6xl md:text-8xl font-extrabold bg-gradient-neon bg-clip-text text-transparent leading-none"
+                  >
+                    M
+                  </motion.span>
+
+                  <motion.span
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.12 }}
+                    className="text-6xl md:text-8xl font-extrabold bg-gradient-neon bg-clip-text text-transparent leading-none"
+                  >
+                    U
+                  </motion.span>
+
+                  <motion.span
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.18 }}
+                    className="text-6xl md:text-8xl font-extrabold bg-gradient-neon bg-clip-text text-transparent leading-none"
+                  >
+                    C
+                  </motion.span>
+
+                  <motion.span
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.24 }}
+                    className="text-6xl md:text-8xl font-extrabold bg-gradient-neon bg-clip-text text-transparent leading-none"
+                  >
+                    A
+                  </motion.span>
+                </div>
+                {/* Labels under each letter */}
+                <div className="flex items-center gap-10 text-sm small:text-base">
+                  <div className="text-foreground text-center">Money</div>
+                  <div className="text-foreground text-center">Unified</div>
+                  <div className="text-foreground text-center">Crowdfunding</div>
+                  <div className="text-foreground text-center">Available</div>
+                </div>
+              </div>
             </h1>
             
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Financie projetos inovadores usando blockchain Stellar. 
-              Transparência total, taxas baixas e segurança garantida.
+              Transforme ideias em ações reais. 
+              Apoie vaquinhas e causas sociais com segurança e transparência na Stellar.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

@@ -5,14 +5,38 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Wallet, Mail, Zap, Shield, Globe } from "lucide-react";
+import useAuth from "../hooks/use-auth";
+import { useToast } from "../hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const handleWalletConnect = () => {
-    console.log("Conectar com carteira");
+  const { loading, loginWithEmail, loginWithFreighter } = useAuth();
+  const { toast } = useToast();
+  const navigate = useNavigate();
+
+  const handleWalletConnect = async () => {
+
+    const result = await loginWithFreighter();
+    if (result.success) {
+      toast({ title: "Login efetuado", description: "Autenticado via Freighter" });
+      navigate("/");
+    } else {
+      toast({ title: "Falha no login", description: result.message || "Erro ao autenticar via Freighter" });
+    }
   };
 
-  const handleEmailLogin = () => {
-    console.log("Login com email");
+  const handleEmailLogin = async () => {
+    const emailEl = document.getElementById("email") as HTMLInputElement | null;
+    const passEl = document.getElementById("password") as HTMLInputElement | null;
+    const email = emailEl?.value || "";
+    const password = passEl?.value || "";
+    const result = await loginWithEmail(email, password);
+    if (result.success) {
+      toast({ title: "Login efetuado", description: "Autenticado com email" });
+      navigate("/");
+    } else {
+      toast({ title: "Falha no login", description: result.message || "Erro ao autenticar com email" });
+    }
   };
 
   return (
@@ -81,6 +105,7 @@ const Login = () => {
                   variant="wallet"
                   size="lg"
                   className="w-full"
+                  disabled={loading}
                 >
                   <Wallet className="w-5 h-5 mr-2" />
                   Conectar com Carteira Stellar

@@ -5,7 +5,7 @@ export interface Campaign {
   target: number;
   raised: number;
   creator: string;
-  walletAddress: string;
+  walletAddresses: { address: string; percentage: number }[];
   image?: string;
   category: string;
   createdAt: string;
@@ -28,7 +28,9 @@ export const mockCampaigns: Campaign[] = [
     target: 50000,
     raised: 32500,
     creator: "DevTeam Stellar",
-    walletAddress: "GBXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    walletAddresses: [
+      { address: "GBXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", percentage: 100 }
+    ],
     image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&h=400&fit=crop",
     category: "Tecnologia",
     createdAt: "2024-01-15",
@@ -63,7 +65,9 @@ export const mockCampaigns: Campaign[] = [
     target: 25000,
     raised: 18750,
     creator: "EduCrypto",
-    walletAddress: "GCXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    walletAddresses: [
+      { address: "GCXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", percentage: 100 }
+    ],
     image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&h=400&fit=crop",
     category: "Educação",
     createdAt: "2024-01-10",
@@ -84,7 +88,9 @@ export const mockCampaigns: Campaign[] = [
     target: 75000,
     raised: 45000,
     creator: "GreenNFT",
-    walletAddress: "GDXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    walletAddresses: [
+      { address: "GDXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", percentage: 100 }
+    ],
     image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&h=400&fit=crop",
     category: "Arte & NFT",
     createdAt: "2024-01-05",
@@ -112,7 +118,9 @@ export const mockCampaigns: Campaign[] = [
     target: 100000,
     raised: 67500,
     creator: "PaymentLabs",
-    walletAddress: "GEXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    walletAddresses: [
+      { address: "GEXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", percentage: 100 }
+    ],
     image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&h=400&fit=crop",
     category: "FinTech",
     createdAt: "2023-12-28",

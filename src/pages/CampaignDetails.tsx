@@ -117,20 +117,9 @@ const CampaignDetails = () => {
                           transition={{ delay: index * 0.1 }}
                           className="flex items-center justify-between p-4 bg-muted/50 rounded-lg hover:bg-muted/70 transition-colors"
                         >
-                          <div className="flex-1">
+                          <div>
                             <div className="font-medium">{donation.donor}</div>
-                            <div className="text-sm text-muted-foreground">
-                              {donation.timestamp}
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <div className="font-bold text-primary">
-                              {donation.amount.toLocaleString()} XLM
-                            </div>
-                            <div className="text-xs text-muted-foreground">
-                              {donation.hash}
-                              <ExternalLink className="w-3 h-3 inline ml-1" />
-                            </div>
+                            <div className="text-sm text-muted-foreground">{new Date(donation.timestamp).toLocaleDateString('pt-BR')}</div>
                           </div>
                         </motion.div>
                       ))}
@@ -188,17 +177,27 @@ const CampaignDetails = () => {
 
                   {/* QR Code */}
                   <div className="text-center space-y-4">
-                    <h4 className="font-medium">Endereço Stellar</h4>
-                    <div className="flex justify-center p-4 bg-white rounded-lg">
-                      <QRCodeSVG
-                        value={campaign.walletAddress}
-                        size={150}
-                        bgColor="#ffffff"
-                        fgColor="#000000"
-                      />
-                    </div>
-                    <div className="text-xs text-muted-foreground break-all font-mono bg-muted/50 p-2 rounded">
-                      {campaign.walletAddress}
+                    <h4 className="font-medium">Endereços Stellar</h4>
+                    <div className="grid grid-cols-1 gap-4">
+                      {campaign.walletAddresses.map((w, idx) => (
+                        <div key={w.address} className="p-4 bg-white rounded-lg flex flex-col items-center">
+                          <QRCodeSVG
+                            value={w.address}
+                            size={120}
+                            bgColor="#ffffff"
+                            fgColor="#000000"
+                          />
+                          <div className="mt-2 text-xs text-muted-foreground break-all font-mono bg-muted/50 p-2 rounded w-full text-center">
+                            {w.address}
+                          </div>
+                          <div className="text-sm text-muted-foreground mt-2">Destinação: {w.percentage}%</div>
+                          <div className="mt-2 w-full">
+                            <Button variant="outline" size="sm" className="w-full" onClick={() => navigator.clipboard.writeText(w.address)}>
+                              Copiar Endereço
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
 
@@ -220,9 +219,12 @@ const CampaignDetails = () => {
                       variant="outline" 
                       size="lg" 
                       className="w-full"
-                      onClick={() => navigator.clipboard.writeText(campaign.walletAddress)}
+                      onClick={() => {
+                        const primary = campaign.walletAddresses && campaign.walletAddresses[0] ? campaign.walletAddresses[0].address : undefined;
+                        if (primary) navigator.clipboard.writeText(primary);
+                      }}
                     >
-                      Copiar Endereço
+                      Copiar Endereço Principal
                     </Button>
                   </div>
                 </CardContent>

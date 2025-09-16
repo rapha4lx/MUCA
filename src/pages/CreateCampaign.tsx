@@ -16,6 +16,7 @@ interface CampaignForm {
   description: string;
   target: string;
   category: string;
+  walletAddresses?: { address: string; percentage: number }[];
 }
 
 const CreateCampaign = () => {
@@ -25,6 +26,7 @@ const CreateCampaign = () => {
     description: "",
     target: "",
     category: "",
+    walletAddresses: [{ address: "", percentage: 100 }],
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -38,6 +40,15 @@ const CreateCampaign = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+
+    // Validate wallet percentages sum to 100
+    const wallets = form.walletAddresses || [];
+    const sum = wallets.reduce((acc, w) => acc + Number(w.percentage || 0), 0);
+    if (wallets.length > 0 && sum !== 100) {
+      alert(`A soma das porcentagens das carteiras deve ser 100%. Atualmente: ${sum}%`);
+      setIsSubmitting(false);
+      return;
+    }
 
     // Mock submission
     console.log("Dados da campanha:", {
@@ -53,6 +64,25 @@ const CreateCampaign = () => {
     
     // Redirect to campaign page (mock ID)
     navigate("/campaign/new-campaign");
+  };
+
+  const updateWallet = (index: number, key: 'address' | 'percentage', value: string | number) => {
+    setForm(prev => {
+      const list = prev.walletAddresses ? [...prev.walletAddresses] : [];
+      list[index] = { ...list[index], [key]: key === 'percentage' ? Number(value) : value } as any;
+      return { ...prev, walletAddresses: list };
+    });
+  };
+
+  const addWallet = () => {
+    setForm(prev => ({ ...prev, walletAddresses: [...(prev.walletAddresses || []), { address: '', percentage: 0 }] }));
+  };
+
+  const removeWallet = (index: number) => {
+    setForm(prev => {
+      const list = (prev.walletAddresses || []).filter((_, i) => i !== index);
+      return { ...prev, walletAddresses: list };
+    });
   };
 
   const categories = [
@@ -196,6 +226,33 @@ const CreateCampaign = () => {
                   </div>
 
                   {/* Submit Button */}
+                  {/* Wallet Addresses */}
+                  <div className="space-y-2">
+                    <Label className="flex items-center gap-2">Carteiras de Recebimento</Label>
+                    <div className="space-y-2">
+                      {(form.walletAddresses || []).map((w, idx) => (
+                        <div key={idx} className="flex gap-2">
+                          <Input
+                            placeholder="Endereço Stellar (G... )"
+                            value={w.address}
+                            onChange={(e) => updateWallet(idx, 'address', e.target.value)}
+                            className="flex-1 bg-input/50 border-primary/20"
+                          />
+                          <Input
+                            type="number"
+                            placeholder="%"
+                            value={w.percentage}
+                            onChange={(e) => updateWallet(idx, 'percentage', Number(e.target.value))}
+                            className="w-24 bg-input/50 border-primary/20"
+                          />
+                          <Button variant="ghost" onClick={() => removeWallet(idx)}>Remover</Button>
+                        </div>
+                      ))}
+                      <div>
+                        <Button variant="outline" size="sm" onClick={addWallet}>Adicionar Carteira</Button>
+                      </div>
+                    </div>
+                  </div>
                   <motion.div
                     className="pt-4"
                     whileHover={{ scale: isSubmitting ? 1 : 1.02 }}

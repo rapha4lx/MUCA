@@ -198,7 +198,7 @@ const CreateCampaign = () => {
           className="mb-6"
         >
           <Link to="/">
-            <Button variant="ghost" className="text-primary hover:text-primary/80">
+            <Button variant="ghost" className="text-primary">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Voltar ao Início
             </Button>

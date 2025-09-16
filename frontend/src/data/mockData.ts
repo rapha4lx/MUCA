@@ -83,15 +83,15 @@ export const mockCampaigns: Campaign[] = [
   },
   {
     id: "3",
-    title: "Marketplace NFT Sustentável",
-    description: "Criação de um marketplace de NFTs focado em arte digital sustentável e com baixo consumo energético na rede Stellar.",
+    title: "Ajuda de custo, gato",
+    description: "Vaquinha para alimentar gatos de rua durante o ano inteiro, com contribuições seguras e transparentes na rede Stellar.",
     target: 75000,
     raised: 45000,
     creator: "GreenNFT",
     walletAddresses: [
       { address: "GDXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", percentage: 100 }
     ],
-    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&h=400&fit=crop",
+    image: "https://img.odcdn.com.br/wp-content/uploads/2024/08/Destaque-Gato-triste-IA-1920x1080.jpg",
     category: "Arte & NFT",
     createdAt: "2024-01-05",
     donations: [
@@ -113,15 +113,15 @@ export const mockCampaigns: Campaign[] = [
   },
   {
     id: "4",
-    title: "Sistema de Pagamentos P2P",
-    description: "Desenvolvendo um sistema de pagamentos peer-to-peer usando a rede Stellar para facilitar transações internacionais.",
+    title: "Ajuda na ultima enchente",
+    description: "Vaquinha para fornecer alimentos, roupas e suprimentos às vítimas da enchente, com transparência total usando a rede Stellar.",
     target: 100000,
     raised: 67500,
     creator: "PaymentLabs",
     walletAddresses: [
       { address: "GEXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", percentage: 100 }
     ],
-    image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&h=400&fit=crop",
+    image: "https://blog.brkambiental.com.br/wp-content/uploads/2020/05/enchentes-no-brasil.jpg",
     category: "FinTech",
     createdAt: "2023-12-28",
     donations: [
